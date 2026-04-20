@@ -116,6 +116,20 @@ const CATEGORY_SPECS = [
     tag: 'G',
     dataFile: 'g-cert-quiz-data.js',
     poolName: 'gCertQuestionPool'
+  },
+  {
+    id: 'ai-coding-practice',
+    title: 'AIコーディング運用・実践クイズ100',
+    tag: 'AI',
+    dataFile: 'ai-coding-practice-quiz-data.js',
+    poolName: 'aiCodingPracticeQuestionPool'
+  },
+  {
+    id: 'git-github-basic',
+    title: 'Git・GitHub 基本操作クイズ',
+    tag: 'Git',
+    dataFile: 'git-github-basic-quiz-data.js',
+    poolName: 'gitGithubBasicQuestionPool'
   }
 ];
 
@@ -763,6 +777,35 @@ function getSecretStaticColliders() {
       height: rect.height
     });
   });
+
+  if (state.currentScreen === 'quiz' && !state.answered) {
+    /** @type {QuizQuestion | undefined} */
+    const currentQuestion = state.currentQuiz[state.currentIndex];
+    const correctChoice = currentQuestion
+      ? dom.choices.querySelectorAll('.choice-btn')[currentQuestion.answer]
+      : null;
+
+    if (correctChoice instanceof HTMLElement) {
+      const rect = correctChoice.getBoundingClientRect();
+      const styles = window.getComputedStyle(correctChoice);
+
+      if (
+        styles.display !== 'none' &&
+        styles.visibility !== 'hidden' &&
+        rect.width >= 8 &&
+        rect.height >= 8 &&
+        rect.bottom >= 0 &&
+        rect.top <= window.innerHeight
+      ) {
+        colliders.push({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height
+        });
+      }
+    }
+  }
 
   return colliders;
 }
